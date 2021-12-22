@@ -9,7 +9,7 @@ const currentDate = new Date();
 class TaskController {
 
 
-    async create(req, res) { //Cria uma nova task
+    async create(req, res) { // Create a new task
         const task = new TaskModel(req.body);
         await task
                 .save()
@@ -21,7 +21,7 @@ class TaskController {
                 });
     };
 
-    async update(req, res) { //alteras as caracteristicas da Task
+    async update(req, res) { // Patch task details
         const { id } = req.params
 
         await TaskModel.findByIdAndUpdate({ '_id': id }, req.body, {new: true})
@@ -33,7 +33,7 @@ class TaskController {
         });
     };
 
-    async list(req, res) { //lista todas as tarefas do dispositivo
+    async list(req, res) { // List all tasks
         
         await TaskModel.find({ macadress: {'$in': req.params.macadress} })
                         .sort('when')
@@ -45,7 +45,7 @@ class TaskController {
                         });
     };
     
-    async listOne(req, res) { //Listando detalhes de uma task
+    async listOne(req, res) { // List task details
         const { id } = req.params;
         
         if(id) {
@@ -60,7 +60,7 @@ class TaskController {
         };
     };
 
-    async delete(req, res) {
+    async delete(req, res) { //Delete tasks
         const { id } = req.params;
 
         const Task = await TaskModel.findById(id);
@@ -75,7 +75,7 @@ class TaskController {
         });
     };
 
-    async doneTask(req, res) {
+    async doneTask(req, res) { // change the task status
         const { id, done } = req.params;
 
         await TaskModel.findByIdAndUpdate(
@@ -90,7 +90,7 @@ class TaskController {
             })
     };
 
-    async listOverTasks(req, res) {
+    async listOverTasks(req, res) { //list overdue tasks
         const { macadress } = req.params;
 
         await TaskModel.find({'when': {'$lt': currentDate}, 'macadress': {'$in': macadress}})
